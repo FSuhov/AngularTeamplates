@@ -29,7 +29,7 @@ export class CognitoService {
 
   public signUp(user: IUser): Promise<any> {
     return Auth.signUp({
-      username: user.email,
+      username: user.name,
       password: user.password,
     });
   }
@@ -39,7 +39,7 @@ export class CognitoService {
   }
 
   public signIn(user: IUser): Promise<any> {
-    return Auth.signIn(user.email, user.password)
+    return Auth.signIn(user.name, user.password)
     .then(() => {
       this.authenticationSubject.next(true);
     });
@@ -78,6 +78,13 @@ export class CognitoService {
     .then((cognitoUser: any) => {
       return Auth.updateUserAttributes(cognitoUser, user);
     });
+  }
+
+  public getStore(){
+    return Auth.currentSession()
+     .then(value => {
+      console.log(value.getAccessToken());
+     })
   }
 
 }
